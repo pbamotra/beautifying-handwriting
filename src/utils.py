@@ -55,11 +55,12 @@ def get_font_image_by_char(font_data, char='all', n_subset=0, out='../data/image
                 break
     else:
         for font_id, font in enumerate(font_data):
-            ch = font[mapping[char]]
-            img = grayscale_to_rgb(ch)
-            img.save(out + str(font_id) + '_' + ch + '.png')
-            if n_subset != 0 and font_id + 1 == n_subset:
-                break
+            for ch_id, cha in enumerate(char):
+                ch = font[mapping[cha]]
+                img = grayscale_to_rgb(ch)
+                img.save(out + str(font_id) + '_' + cha + '.png')
+                if n_subset != 0 and font_id + 1 == n_subset:
+                    break
 
 
 def image_to_64x64(input_image, output_filename='out.png'):
