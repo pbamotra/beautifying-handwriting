@@ -2,7 +2,7 @@ import cv
 import cv2
 import h5py
 import os
-import PIL
+from PIL import Image
 import sys
 import string
 
@@ -39,8 +39,7 @@ def grayscale_to_rgb(grayscale_array):
         return
 
     rgb_image = cv2.cvtColor(grayscale_array, cv.CV_GRAY2RGB)
-    return PIL.Image.fromarray(255 - rgb_image)
-
+    return Image.fromarray(255 - rgb_image)
 
 def get_font_image_by_char(font_data, char='all', n_subset=0, out='../data/images/'):
     charset = list(string.ascii_uppercase) + list(string.ascii_lowercase) + map(str, range(10))
@@ -48,19 +47,23 @@ def get_font_image_by_char(font_data, char='all', n_subset=0, out='../data/image
 
     if char == 'all':
         for font_id, font in enumerate(font_data):
+            if (font_id + 1) % 10 == 0:
+                print 'Processed', font_id + 1, 'fonts'
             for ch_id, ch in enumerate(font):
                 img = grayscale_to_rgb(ch)
                 img.save(out + str(font_id) + '_' + str(ch_id) + '.png')
-            if n_subset != 0 and font_id + 1 == n_subset:
+            if n_subset != 0 and (font_id + 1) == n_subset:
                 break
     else:
         for font_id, font in enumerate(font_data):
+            if (font_id + 1) % 10 == 0:
+                print 'Processed', font_id + 1, 'fonts'
             for ch_id, cha in enumerate(char):
                 ch = font[mapping[cha]]
                 img = grayscale_to_rgb(ch)
                 img.save(out + str(font_id) + '_' + cha + '.png')
-                if n_subset != 0 and font_id + 1 == n_subset:
-                    break
+            if n_subset != 0 and (font_id + 1) == n_subset:
+            	break
 
 
 def image_to_64x64(input_image, output_filename='out.png'):
@@ -71,9 +74,8 @@ def image_to_64x64(input_image, output_filename='out.png'):
     :param output_filename: output image filename
     :return: 3-channel RGB image corresponding to input image
     """
-    image = PIL.Image.open(input_image).convert('RGB')
+    image = Image.open(input_image).convert('RGB')
     image.save(output_filename)
-
 
 if __name__ == '__main__':
     print 'Hello world. Welcome to utilities.'
