@@ -1,14 +1,6 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
+*.mat
 env/
+<<<<<<< Updated upstream
 build/
 develop-eggs/
 dist/
@@ -90,3 +82,10 @@ ENV/
 
 # Ignore fonts file
 data/fonts.hdf5
+=======
+.idea
+__pycache__
+*.pyc
+*.jpg
+models/
+>>>>>>> Stashed changes
