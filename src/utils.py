@@ -131,8 +131,32 @@ def convert_to_RGB_format(path_to_contents_dir, path_to_out_dir):
         I.save(path_to_out_dir+f)
 
 
+def generate_run_sh(contents_dir, styles_dir, output_dir, style_wt=0.5, content_wt=0.5):
+    command = 'python neural_style.py --content {} --styles {} --output {}/final.png ' \
+              '--network ../models/imagenet-vgg-verydeep-19.mat --iterations 500 --content-weight {} ' \
+              '--style-weight {} '
+
+    for image in os.listdir(contents_dir):
+        if image.startswith("."):
+            continue
+        for style in os.listdir(styles_dir):
+            if style.startswith("."):
+                continue
+            c = contents_dir+image
+            s = styles_dir+style
+            o = output_dir+style.split(".")[0]
+            if not os.path.exists(o):
+                os.makedirs(o)
+            run_cmd = command.format(c,s,o,style_wt,content_wt)
+            print run_cmd
+            for _ in xrange(3):
+                print 'echo'
+            print 'echo "' + '-' * 100 + '"'
+
+
 if __name__ == '__main__':
-    data = read_data()
-    print data.shape
-    save_font_image_by_char(data, char='all', n_subset=20, out='../results/', fontid=19)
+    #data = read_data()
+    #print data.shape
+    #save_font_image_by_char(data, char='all', n_subset=20, out='../results/', fontid=19)
+    generate_run_sh("../data/contents_rgb/", "../data/styles-sample/", "../experiments/")
 
