@@ -55,8 +55,8 @@ def stylize(network, initial, content, styles, iterations,
             for layer in STYLE_LAYERS:
                 features = net[layer].eval(feed_dict={image: style_pre})
                 features = np.reshape(features, (-1, features.shape[3]))
-                #gram = np.matmul(features.T, features) / features.size
-                gram = rbf_kernel(features.T, features.T) / features.size
+                gram = np.matmul(features.T, features) / features.size
+                #gram = rbf_kernel(features.T, features.T) / features.size
                 style_features[i][layer] = gram
 
     # make stylized image using backpropogation
@@ -85,11 +85,11 @@ def stylize(network, initial, content, styles, iterations,
                 size = height * width * number
                 feats = tf.reshape(layer, (-1, number))
                 gram = tf.matmul(tf.transpose(feats), feats) / size
-                print "feats shape = ", tf.shape(feats)
-                with tf.Session():
-                    print feats.eval().shape
-                print "gram", gram
-                gram = rbf_kernel(tf.transpose(feats), tf.transpose(feats)) / size
+                #print "feats shape = ", tf.shape(feats)
+                #with tf.Session():
+                #    print feats.eval().shape
+                #print "gram", gram
+                #gram = rbf_kernel(tf.transpose(feats), tf.transpose(feats)) / size
                 style_gram = style_features[i][style_layer]
                 style_losses.append(2 * tf.nn.l2_loss(gram - style_gram) / style_gram.size)
             style_loss += style_weight * style_blend_weights[i] * reduce(tf.add, style_losses)
