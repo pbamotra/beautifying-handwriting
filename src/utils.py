@@ -2,6 +2,7 @@ import cv
 import cv2
 import h5py
 import os
+import numpy as np
 from PIL import Image
 import sys
 import string
@@ -42,14 +43,26 @@ def grayscale_to_rgb(grayscale_array):
     return Image.fromarray(255 - rgb_image)
 
 
-def save_font_image_by_char(font_data, char='all', n_subset=0, out='../data/images/'):
+def save_font_image_by_char(font_data, char='all', n_subset=0, out='../results/', fontid=None):
     charset = list(string.ascii_uppercase) + list(string.ascii_lowercase) + map(str, range(10))
     mapping = {ch: ch_id for (ch_id, ch) in enumerate(charset)}
 
+    start = 0
+
+    if fontid is not None:
+        print 'Processed', fontid + 1, 'th font'
+        font = font_data[fontid]
+        for ch_id, ch in enumerate(font):
+            img = grayscale_to_rgb(ch)
+            img.save(out + str(fontid) + '_' + str(ch_id) + '.png')
+        return
+
+    print 'Font data shape', font_data.shape
     if char == 'all':
-        for font_id, font in enumerate(font_data):
+        for font_id, font in enumerate(font_data, start=start):
             if (font_id + 1) % 10 == 0:
-                print 'Processed', font_id + 1, 'fonts'
+                print 'Processed', font_id + 1, 'th font'
+            print "Font size", font.shape
             for ch_id, ch in enumerate(font):
                 img = grayscale_to_rgb(ch)
                 img.save(out + str(font_id) + '_' + str(ch_id) + '.png')
@@ -109,4 +122,7 @@ def image_resize(input_image, output_filename='out.png', resize=(64,64)):
     image.save(output_filename)
 
 if __name__ == '__main__':
-    print 'Hello world. Welcome to utilities.'
+    data = read_data()
+    print data.shape
+    save_font_image_by_char(data, char='all', n_subset=20, out='../results/', fontid=19)
+
