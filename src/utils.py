@@ -1,6 +1,6 @@
-import cv
-import cv2
-import h5py
+#import cv
+#import cv2
+#import h5py
 import os
 import numpy as np
 from PIL import Image
@@ -132,7 +132,7 @@ def convert_to_RGB_format(path_to_contents_dir, path_to_out_dir):
 
 
 def generate_run_sh(contents_dir, styles_dir, output_dir, style_wt=0.5, content_wt=0.5):
-    command = 'python neural_style.py --content {} --styles {} --output {}/final.png ' \
+    command = 'python neural_style.py --content {} --styles {} --output {} ' \
               '--network ../models/imagenet-vgg-verydeep-19.mat --iterations 500 --content-weight {} ' \
               '--style-weight {} '
 
@@ -147,7 +147,8 @@ def generate_run_sh(contents_dir, styles_dir, output_dir, style_wt=0.5, content_
             o = output_dir+style.split(".")[0]
             if not os.path.exists(o):
                 os.makedirs(o)
-            run_cmd = command.format(c,s,o,style_wt,content_wt)
+            output = o+"/final_"+image
+            run_cmd = command.format(c,s,output,style_wt,content_wt)
             print run_cmd
             for _ in xrange(3):
                 print 'echo'
