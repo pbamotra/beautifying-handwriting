@@ -41,7 +41,8 @@ def grayscale_to_rgb(grayscale_array):
     rgb_image = cv2.cvtColor(grayscale_array, cv.CV_GRAY2RGB)
     return Image.fromarray(255 - rgb_image)
 
-def get_font_image_by_char(font_data, char='all', n_subset=0, out='../data/images/'):
+
+def save_font_image_by_char(font_data, char='all', n_subset=0, out='../data/images/'):
     charset = list(string.ascii_uppercase) + list(string.ascii_lowercase) + map(str, range(10))
     mapping = {ch: ch_id for (ch_id, ch) in enumerate(charset)}
 
@@ -63,18 +64,48 @@ def get_font_image_by_char(font_data, char='all', n_subset=0, out='../data/image
                 img = grayscale_to_rgb(ch)
                 img.save(out + str(font_id) + '_' + cha + '.png')
             if n_subset != 0 and (font_id + 1) == n_subset:
-            	break
+                break
 
 
-def image_to_64x64(input_image, output_filename='out.png'):
+def get_font_image_by_char(font_data, char='all', n_subset=0):
+
+    charset = list(string.ascii_uppercase) + list(string.ascii_lowercase) + map(str, range(10))
+    mapping = {ch: ch_id for (ch_id, ch) in enumerate(charset)}
+
+    result = list()
+
+    if char == 'all':
+        for font_id, font in enumerate(font_data, start=1):
+            partial_list = list()
+            for ch_id, ch in enumerate(font):
+                partial_list.append(grayscale_to_rgb(ch))
+            result.append(partial_list)
+            if n_subset and (font_id == n_subset):
+                break
+    else:
+        for font_id, font in enumerate(font_data, start=1):
+            partial_list = list()
+            for ch_id, cha in enumerate(char):
+                ch = font[mapping[cha]]
+                partial_list.append(grayscale_to_rgb(ch))
+            result.append(partial_list)
+            if n_subset and (font_id == n_subset):
+                break
+
+    return result
+
+
+def image_resize(input_image, output_filename='out.png', resize=(64,64)):
     """
     Convert input image from NIST SD 19 to 64x64 RGB image
 
     :param input_image: image filename
     :param output_filename: output image filename
+    :param resize: output image size
     :return: 3-channel RGB image corresponding to input image
     """
     image = Image.open(input_image).convert('RGB')
+    image = image.resize(resize)
     image.save(output_filename)
 
 if __name__ == '__main__':
