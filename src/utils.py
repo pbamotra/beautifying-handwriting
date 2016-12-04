@@ -121,6 +121,16 @@ def image_resize(input_image, output_filename='out.png', resize=(64,64)):
     image = image.resize(resize)
     image.save(output_filename)
 
+
+def convert_to_RGB_format(path_to_contents_dir, path_to_out_dir):
+    files = os.listdir(path_to_contents_dir)
+    for f in files:
+        if f.startswith('.'):
+            continue
+        I = Image.open(path_to_contents_dir+f).convert('RGB')
+        I.save(path_to_out_dir+f)
+
+
 if __name__ == '__main__':
     data = read_data()
     print data.shape
