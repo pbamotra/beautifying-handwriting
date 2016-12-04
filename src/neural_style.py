@@ -1,5 +1,4 @@
 # Copyright (c) 2015-2016 Anish Athalye. Released under GPLv3.
-
 import os
 
 import numpy as np
@@ -9,7 +8,6 @@ from stylize import stylize
 
 import math
 from argparse import ArgumentParser
-
 
 # default arguments
 CONTENT_WEIGHT = 5e0
