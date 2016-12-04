@@ -10,6 +10,7 @@ from stylize import stylize
 import math
 from argparse import ArgumentParser
 
+
 # default arguments
 CONTENT_WEIGHT = 5e0
 STYLE_WEIGHT = 1e2
