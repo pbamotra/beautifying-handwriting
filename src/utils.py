@@ -148,8 +148,16 @@ def generate_run_sh(contents_dir, styles_dir, output_dir, style_wt=0.5, content_
             if not os.path.exists(o):
                 os.makedirs(o)
             output = o+"/final_"+image
+            output1 = o+"/final_style_bias_"+image
+            output2 = o + "/final_content_bias_"+image
             run_cmd = command.format(c,s,output,style_wt,content_wt)
+            run_cmd1 = command.format(c,s,output1,style_wt,content_wt) + "--initial "+styles_dir+style
+            run_cmd2 = command.format(c,s,output2,style_wt,content_wt) + "--initial "+contents_dir+image
+
             print run_cmd
+            print run_cmd1
+            print run_cmd2
+
             for _ in xrange(3):
                 print 'echo'
             print 'echo "' + '-' * 100 + '"'
